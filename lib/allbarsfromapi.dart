@@ -13,14 +13,14 @@ class AllBarsFromApi {
         List<dynamic> jsonList = json.decode(response.body);
         //print(jsonList);
 
-        List<Allbars> Allbarslist =
+        List<Allbars> allbarslist =
             jsonList.map((jsonMap) => Allbars.fromJson(jsonMap)).toList();
         //print(AllbarsList);
         //  for (var product in AllbarsList) {
         //  print(
         //    'ProductId: ${product.id}, ProductName: ${product.productName}');
         // }
-        return Allbarslist;
+        return allbarslist;
       } else {
         print('Failed to load data: ${response.statusCode}');
         return [];

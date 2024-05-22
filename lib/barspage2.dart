@@ -107,7 +107,7 @@ class _BarsPageWidgetState extends State<BarPageWidget2> {
           .where((element) => element.catSelected == productNameSelected)
           .toList();
 
-      await Geolocator.checkPermission();
+      /* await Geolocator.checkPermission();
       await Geolocator.requestPermission();
 
       await Geolocator.getCurrentPosition(
@@ -130,7 +130,7 @@ class _BarsPageWidgetState extends State<BarPageWidget2> {
       } catch (e) {
         print(e);
       }
-
+        */
       for (var fb in filteredBarProducts) {
         print(fb.catSelected);
       }
