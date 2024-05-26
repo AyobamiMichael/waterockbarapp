@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:waterockbarmanagerapp/barmaps.dart';
 import 'package:waterockbarmanagerapp/barspage2.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:waterockbarmanagerapp/models/locationdistancemodel.dart';
+import 'package:http/http.dart' as http;
 
 class BarDetailsPageWidget extends StatefulWidget {
   const BarDetailsPageWidget({super.key});
@@ -11,6 +15,9 @@ class BarDetailsPageWidget extends StatefulWidget {
 }
 
 class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
+  String distanceResult = '';
+  late Position _currentPosition;
+  String currentAddress = '';
   @override
   void initState() {
     super.initState();
@@ -18,6 +25,7 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
     print(BarTile.barPhone);
     print(BarTile.barImage);
     requestLocationPermission();
+    getBarDistance(BarTile.barAddress);
   }
 
   @override
@@ -48,33 +56,70 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'BAR NAME ${BarTile.barName}',
+                    '            ${BarTile.barName}',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 8),
+                  Divider(
+                    height: 15,
+                    thickness: 2,
+                    color: Colors.grey[300],
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                  SizedBox(height: 15),
                   Text(
-                    'ADDRESS ${BarTile.barAddress}',
+                    'ADDRESS: ${BarTile.barAddress}',
                     style: TextStyle(fontSize: 18),
                   ),
                   SizedBox(height: 8),
+                  Divider(
+                    height: 15,
+                    thickness: 2,
+                    color: Colors.grey[300],
+                    indent: 20,
+                    endIndent: 20,
+                  ),
                   Text(
-                    'PHONE ${BarTile.barPhone}',
+                    'PHONE: ${BarTile.barPhone}',
                     style: TextStyle(fontSize: 18),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Add to cart functionality here
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const BarMap()));
-                      print('map');
-                    },
-                    child: const Text('Google Map'),
+                  Divider(
+                    height: 20,
+                    thickness: 2,
+                    color: Colors.grey[300],
+                    indent: 20,
+                    endIndent: 20,
                   ),
+                  Text(
+                    'Distance: $distanceResult',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Divider(
+                    height: 20,
+                    thickness: 2,
+                    color: Colors.grey[300],
+                    indent: 20,
+                    endIndent: 20,
+                  ),
+                  SizedBox(
+                      width: 200,
+                      child: Padding(
+                          padding: const EdgeInsets.only(left: 90.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Add to cart functionality here
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const BarMap()));
+                              print('map');
+                            },
+                            child: const Text('Google Map'),
+                          ))),
                 ],
               ),
             ),
@@ -96,5 +141,48 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
     } else {
       // Handle other permission status (denied, etc.)
     }
+  }
+
+  Future<void> getBarDistance(String barAddress) async {
+    await Geolocator.checkPermission();
+    await Geolocator.requestPermission();
+
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) async {
+      _currentPosition = position;
+      print('CURRENT POS: $_currentPosition');
+    });
+
+    try {
+      List<Placemark> p = await placemarkFromCoordinates(
+          _currentPosition.latitude, _currentPosition.longitude);
+
+      Placemark place = p[0];
+      // print('Placemarks: $place');
+
+      currentAddress =
+          "${place.name}, ${place.locality}, ${place.postalCode}, ${place.country}";
+      print('CURRENT ADDRESS ' + currentAddress);
+    } catch (e) {
+      print(e);
+    }
+
+    String destinationWithoutSpace = barAddress.replaceAll(' ', '');
+
+    var client = http.Client();
+    var uri = Uri.parse(
+        'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$destinationWithoutSpace&origins=$currentAddress&units=metric&key=AIzaSyC4UDVcK8A0aORjJSYUqC7byLkeYEzlYJE');
+
+    var response = await client.get(uri);
+
+    if (response.statusCode == 200) {
+      var json = response.body;
+      final mapdata = addressFromJson(json);
+      setState(() {
+        distanceResult = mapdata.rows[0]['elements'][0]['distance']['text'];
+      });
+    }
+
+    print('DISTANCES ' + distanceResult);
   }
 }

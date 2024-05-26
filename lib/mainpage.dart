@@ -172,7 +172,7 @@ class SearchDelegateWidget extends SearchDelegate {
   @override
   List<Widget> buildActions(BuildContext context) {
     //fetchDataToSearch();
-    _searchingData.fetchDataToSearch(query);
+
     return [
       IconButton(
         icon: Icon(Icons.clear),
@@ -195,6 +195,8 @@ class SearchDelegateWidget extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
+    _searchingData.fetchDataToSearch2(query);
+
     return ListView.builder(
         itemCount: _searchingData.bars.length,
         itemBuilder: (context, index) {
@@ -222,7 +224,7 @@ class SearchDelegateWidget extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     //fetchDataToSearch();
-    //_searchingData.fetchDataToSearch(query);
+    _searchingData.fetchDataToSearch2(query);
     /* final List<Bar> newSuggestionList = query.isEmpty
         ? []
         : _searchingData.bars
@@ -320,6 +322,43 @@ class SearchingData {
             image: bar.barImage,
           ));
         });
+        // getAddress();
+      }
+
+      //isLoading = false;
+    } catch (error) {
+      // Handle errors
+      print('Error fetching data: $error');
+    }
+  }
+
+  Future<void> fetchDataToSearch2(String query) async {
+    try {
+      // Fetch bar products
+      List<Barproducts>? barProductsList =
+          await BarproductsFromApi().getBarproducts();
+      // Fetch bar details
+      //List<Allbars>? allBarsList = await AllBarsFromApi().getAllbars();
+
+      print(query);
+      List<Barproducts> filteredBarProducts = barProductsList
+          .where((element) => element.catSelected == query)
+          .toList();
+      //print(filteredBarProducts);
+      for (var barProduct in filteredBarProducts) {
+        //var correspondingBars =
+        //  allBarsList.where((e) => e.barName == barProduct.barName);
+
+        //print(bar.barAddress);
+        print(barProduct.barName);
+        bars.add(Bar(
+          name: barProduct.barName,
+          address: '',
+          productPrice: barProduct.productPrice,
+          phone: '',
+          image: '',
+        ));
+
         // getAddress();
       }
 
