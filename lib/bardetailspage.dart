@@ -32,7 +32,7 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('WATEROCK'),
+        title: const Text('WATEROCK'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -57,7 +57,7 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
                 children: [
                   Text(
                     '            ${BarTile.barName}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -70,12 +70,12 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
                     indent: 20,
                     endIndent: 20,
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Text(
                     'ADDRESS: ${BarTile.barAddress}',
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Divider(
                     height: 15,
                     thickness: 2,
@@ -85,7 +85,7 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
                   ),
                   Text(
                     'PHONE: ${BarTile.barPhone}',
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   ),
                   Divider(
                     height: 20,
@@ -96,7 +96,7 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
                   ),
                   Text(
                     'Distance: $distanceResult',
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   ),
                   Divider(
                     height: 20,
@@ -162,7 +162,7 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
 
       currentAddress =
           "${place.name}, ${place.locality}, ${place.postalCode}, ${place.country}";
-      print('CURRENT ADDRESS ' + currentAddress);
+      print('CURRENT ADDRESS $currentAddress');
     } catch (e) {
       print(e);
     }
@@ -183,6 +183,6 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
       });
     }
 
-    print('DISTANCES ' + distanceResult);
+    print('DISTANCES $distanceResult');
   }
 }

@@ -30,7 +30,7 @@ class BarMapState extends State<BarMap> {
   getCoordinates() async {
     try {
       //String address = await _storage.read(key: 'SHOP_ADDRESS') ?? '';
-      print('LOCATIONADDRESS' + BarTile.barAddress);
+      print('LOCATIONADDRESS${BarTile.barAddress}');
       List<Location> locations = await locationFromAddress(BarTile.barAddress);
       setState(() {
         initialLocation =
@@ -59,10 +59,18 @@ class BarMapState extends State<BarMap> {
 
   void drawPolyline() async {
     PolylinePoints polylinePoints = PolylinePoints();
+
+    // Create a PolylineRequest object with the required parameters
+    PolylineRequest polylineRequest = PolylineRequest(
+      origin: PointLatLng(initialLocation.latitude, initialLocation.longitude),
+      destination: PointLatLng(
+          destinationLocation.latitude, destinationLocation.longitude),
+      mode: TravelMode.driving,
+    );
+
+    // Pass the polylineRequest object to the method
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      'AIzaSyC4UDVcK8A0aORjJSYUqC7byLkeYEzlYJE',
-      PointLatLng(initialLocation.latitude, initialLocation.longitude),
-      PointLatLng(destinationLocation.latitude, destinationLocation.longitude),
+      request: polylineRequest,
     );
 
     if (result.points.isNotEmpty) {
@@ -72,7 +80,35 @@ class BarMapState extends State<BarMap> {
 
       setState(() {
         polylines.add(Polyline(
-          polylineId: PolylineId("poly"),
+          polylineId: const PolylineId("poly"),
+          color: Colors.blue,
+          width: 3,
+          points: polylineCoordinates,
+        ));
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Error: Unable to fetch route. Please try again.')));
+    }
+  }
+
+  /*void drawPolyline() async {
+    PolylinePoints polylinePoints = PolylinePoints();
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      'AIzaSyC4UDVcK8A0aORjJSYUqC7byLkeYEzlYJE',
+      PointLatLng(initialLocation.latitude, initialLocation.longitude),
+      PointLatLng(destinationLocation.latitude, destinationLocation.longitude),
+    );
+    
+
+    if (result.points.isNotEmpty) {
+      List<LatLng> polylineCoordinates = result.points
+          .map((PointLatLng point) => LatLng(point.latitude, point.longitude))
+          .toList();
+
+      setState(() {
+        polylines.add(Polyline(
+          polylineId: const PolylineId("poly"),
           color: Colors.blue,
           width: 3,
           points: polylineCoordinates,
@@ -81,7 +117,7 @@ class BarMapState extends State<BarMap> {
     } else {
       print("Error: Unable to fetch polyline coordinates");
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {

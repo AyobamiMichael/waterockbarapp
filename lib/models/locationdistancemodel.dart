@@ -17,14 +17,14 @@ class Address {
       required this.status});
 
   factory Address.fromJson(Map<String, dynamic> parsedJson) {
-    var destination_addressesFromJson = parsedJson['destination_addresses'];
-    var origin_addressesFromJson = parsedJson['origin_addresses'];
+    var destinationAddressesfromjson = parsedJson['destination_addresses'];
+    var originAddressesfromjson = parsedJson['origin_addresses'];
     //  var rowsFromJson = parsedJson['rows'];
 
-    List<String> destination_addressesList =
-        destination_addressesFromJson.cast<String>();
+    List<String> destinationAddresseslist =
+        destinationAddressesfromjson.cast<String>();
 
-    List<String> origin_addressesList = origin_addressesFromJson.cast<String>();
+    List<String> originAddresseslist = originAddressesfromjson.cast<String>();
 
     //List<String> rowsList = rowsFromJson.cast<String>();
 
@@ -41,7 +41,7 @@ class Row {
   Row({required this.elements});
 
   factory Row.fromJson(Map<String, dynamic> parsedJson) {
-    return new Row(elements: parsedJson['elements']);
+    return Row(elements: parsedJson['elements']);
   }
 }
 
@@ -51,7 +51,7 @@ class Element {
 
   Element({required this.distance, required this.duration});
   factory Element.fromJson(Map<String, dynamic> parsedJson) {
-    return new Element(
+    return Element(
         distance: parsedJson['distance'], duration: parsedJson['duration']);
   }
 }
@@ -63,7 +63,7 @@ class Distance {
   Distance({required this.text, required this.value});
 
   factory Distance.fromJson(Map<String, dynamic> parsedJson) {
-    return new Distance(text: parsedJson['text'], value: parsedJson['value']);
+    return Distance(text: parsedJson['text'], value: parsedJson['value']);
   }
 }
 
@@ -74,6 +74,6 @@ class Duration {
   Duration({required this.text, required this.value});
 
   factory Duration.fromJson(Map<String, dynamic> parsedJson) {
-    return new Duration(text: parsedJson['text'], value: parsedJson['value']);
+    return Duration(text: parsedJson['text'], value: parsedJson['value']);
   }
 }

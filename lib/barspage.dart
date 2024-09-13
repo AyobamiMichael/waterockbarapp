@@ -99,7 +99,7 @@ class _BarsPageWidgetState extends State<BarsPageWidget> {
                       tileColor: Colors.grey[200],
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        side: BorderSide(color: Colors.blue, width: 2.0),
+                        side: const BorderSide(color: Colors.blue, width: 2.0),
                       ),
                       leading: const CircleAvatar(
                         radius: 60,

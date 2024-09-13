@@ -129,7 +129,7 @@ class MainPageWidgetState extends State<MainPageWidget> {
                             builder: (context) => const BarPageWidget2()));
                   },
                   child: Container(
-                      padding: EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Row(children: [
                         Expanded(
                           child: Image.asset(
@@ -137,12 +137,12 @@ class MainPageWidgetState extends State<MainPageWidget> {
                               width: 180,
                               height: 180),
                         ),
-                        SizedBox(
+                        const SizedBox(
                             width:
                                 10), // Adjust spacing between image and subtitle
                         Text(
                           productsDisplayNames[index],
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
@@ -175,7 +175,7 @@ class SearchDelegateWidget extends SearchDelegate {
 
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -186,7 +186,7 @@ class SearchDelegateWidget extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -205,11 +205,11 @@ class SearchDelegateWidget extends SearchDelegate {
               border: Border.all(color: Colors.blue),
               borderRadius: BorderRadius.circular(10.0),
             ),
-            margin: EdgeInsets.all(8.0),
+            margin: const EdgeInsets.all(8.0),
             child: ListTile(
               title: Text(
                 '${_searchingData.bars[index].name} NGN${_searchingData.bars[index].productPrice}',
-                style: TextStyle(color: Colors.blue),
+                style: const TextStyle(color: Colors.blue),
               ),
               onTap: () {
                 //close(context, searchResult[index]);
@@ -260,11 +260,11 @@ class SearchDelegateWidget extends SearchDelegate {
                 border: Border.all(color: Colors.blue),
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              margin: EdgeInsets.all(8.0),
+              margin: const EdgeInsets.all(8.0),
               child: ListTile(
                 title: Text(
                   '${newSuggestionList[index].name} NGN${newSuggestionList[index].productPrice}',
-                  style: TextStyle(color: Colors.blue),
+                  style: const TextStyle(color: Colors.blue),
                 ),
                 onTap: () {
                   query = newSuggestionList[index].name;
@@ -310,7 +310,7 @@ class SearchingData {
             allBarsList.where((e) => e.barName == barProduct.barName);
 
         // Add bar addresses to bars
-        correspondingBars?.forEach((bar) async {
+        correspondingBars.forEach((bar) async {
           // listOFBarAddresses.add(bar.barAddress);
           print(bar.barAddress);
 

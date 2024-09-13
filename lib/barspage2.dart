@@ -34,7 +34,7 @@ class BarTile extends StatelessWidget {
   static String barPhone = '';
   static String barImage = '';
 
-  BarTile({required this.bar});
+  const BarTile({super.key, required this.bar});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,8 @@ class BarTile extends StatelessWidget {
       tileColor: Colors.grey[200],
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
-        side: BorderSide(color: Color.fromARGB(213, 173, 211, 7), width: 2.0),
+        side: const BorderSide(
+            color: Color.fromARGB(213, 173, 211, 7), width: 2.0),
       ),
       leading: const CircleAvatar(
         backgroundImage: AssetImage('assets/images/choplife.png'),
@@ -154,7 +155,7 @@ class _BarsPageWidgetState extends State<BarPageWidget2> {
 
       for (var barProduct in filteredBarProducts) {
         var correspondingBars =
-            allBarsList?.where((e) => e.barName == barProduct.barName);
+            allBarsList.where((e) => e.barName == barProduct.barName);
 
         // Add bar addresses to bars
         correspondingBars?.forEach((bar) async {
@@ -217,7 +218,7 @@ class _BarsPageWidgetState extends State<BarPageWidget2> {
           distanceResult = mapdata.rows[0]['elements'][0]['distance']['text'];
         }
 
-        print('DISTANCES ' + distanceResult);
+        print('DISTANCES $distanceResult');
       }
     } catch (e) {
       print(e);
@@ -239,7 +240,8 @@ class _BarsPageWidgetState extends State<BarPageWidget2> {
         ],
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator()) // Show loading indicator
+          ? const Center(
+              child: CircularProgressIndicator()) // Show loading indicator
           : Column(
               children: [
                 Expanded(
