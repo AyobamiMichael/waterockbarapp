@@ -133,8 +133,8 @@ class MainPageWidgetState extends State<MainPageWidget> {
                     child: Column(
                       children: [
                         SizedBox(
-                          width: 180,
-                          height: 180,
+                          width: 300,
+                          height: 200,
                           child: Image.asset(
                             'assets/images/${imageNames[index]}',
                             fit: BoxFit.cover,
