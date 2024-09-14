@@ -311,6 +311,7 @@ class SearchingData {
           await BarproductsFromApi().getBarproducts();
       // Fetch bar details
       List<Allbars>? allBarsList = await AllBarsFromApi().getAllbars();
+      print(allBarsList);
 
       //String productNameSelected = MainPageWidgetState.productNameSelected;
       // Use query to fillter bar products, user can enter productname or area
