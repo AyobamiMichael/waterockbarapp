@@ -4,8 +4,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:waterockbarmanagerapp/barmaps.dart';
 import 'package:waterockbarmanagerapp/barspage2.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:waterockbarmanagerapp/models/locationdistancemodel.dart';
+import 'package:waterockbarmanagerapp/models/locationdistancemodel.dart'
+    hide Row;
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class BarDetailsPageWidget extends StatefulWidget {
   const BarDetailsPageWidget({super.key});
@@ -26,6 +28,18 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
     print(BarTile.barImage);
     requestLocationPermission();
     getBarDistance(BarTile.barAddress);
+  }
+
+  void _launchDialer(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    if (await canLaunchUrl(launchUri)) {
+      await launchUrl(launchUri);
+    } else {
+      throw 'Could not launch $phoneNumber';
+    }
   }
 
   @override
@@ -83,9 +97,20 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
                     indent: 20,
                     endIndent: 20,
                   ),
-                  Text(
-                    'PHONE: ${BarTile.barPhone}',
-                    style: const TextStyle(fontSize: 18),
+                  Row(
+                    children: [
+                      Text(
+                        'PHONE: ${BarTile.barPhone}',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.phone, color: Colors.blue),
+                        onPressed: () {
+                          // Launch the phone dialer with the phone number
+                          _launchDialer(BarTile.barPhone);
+                        },
+                      ),
+                    ],
                   ),
                   Divider(
                     height: 20,
@@ -105,21 +130,41 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
                     indent: 20,
                     endIndent: 20,
                   ),
+                  /* SizedBox(
+                    width: double.infinity,
+                    child: IconButton(
+                      icon: const Icon(Icons.location_searching,
+                          size: 40, color: Colors.blue),
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      onPressed: () {
+                        // Add to cart functionality here
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const BarMap()));
+                        print('map');
+                      },
+                    ),
+                  ),*/
                   SizedBox(
-                      width: 200,
-                      child: Padding(
-                          padding: const EdgeInsets.only(left: 90.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // Add to cart functionality here
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const BarMap()));
-                              print('map');
-                            },
-                            child: const Text('Google Map'),
-                          ))),
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            backgroundColor:
+                                const Color.fromARGB(255, 228, 234, 238)),
+                        onPressed: () {
+                          // Add to cart functionality here
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const BarMap()));
+                          print('map');
+                        },
+                        child: const Text('Google Map',
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.black)),
+                      )),
                 ],
               ),
             ),
