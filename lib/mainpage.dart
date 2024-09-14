@@ -18,20 +18,20 @@ class MainPageWidget extends StatefulWidget {
 
 class MainPageWidgetState extends State<MainPageWidget> {
   final List<String> imageNames = [
-    'abacha.png',
-    'asunmeat.jpg',
-    'beefshawarma.jpg',
+    'abacha.jpeg',
+    'asunmeat.jpeg',
+    'beefshawarma.jpeg',
     'chickenshawarma.jpg',
-    'grilledchickenparts.jpg',
-    'swallow.png',
-    'nkwobi.png',
-    'okpa1.png',
-    'riceandstew.png',
-    'ukwa2.png',
-    'crookerfish2.png',
-    'pepperedsnail.png',
-    'freshfish2.png',
-    'cowlegpeppersoup2.jpg',
+    'grilledchickenparts.jpeg',
+    'swallow.jpeg',
+    'nkwobi.jpeg',
+    'okpa1.jpeg',
+    'riceandstew.jpeg',
+    'ukwa2.jpeg',
+    'crookerfish2.jpeg',
+    'pepperedsnail.jpeg',
+    'freshfish2.jpeg',
+    'cowlegpeppersoup2.jpeg',
   ];
 
   final List<String> productsDisplayNames = [
@@ -129,25 +129,39 @@ class MainPageWidgetState extends State<MainPageWidget> {
                             builder: (context) => const BarPageWidget2()));
                   },
                   child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(children: [
-                        Expanded(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: 180,
+                          height: 180,
                           child: Image.asset(
-                              'assets/images/${imageNames[index]}',
-                              width: 180,
-                              height: 180),
-                        ),
-                        const SizedBox(
-                            width:
-                                10), // Adjust spacing between image and subtitle
-                        Text(
-                          productsDisplayNames[index],
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            'assets/images/${imageNames[index]}',
+                            fit: BoxFit.cover,
                           ),
                         ),
-                      ])));
+                        const SizedBox(
+                            height:
+                                10), // Adds some space between the image and the name
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.black,
+                                width: 1), // Border for the container
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            productsDisplayNames[index],
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ));
             }));
   }
 }
