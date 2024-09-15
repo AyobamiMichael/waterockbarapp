@@ -5,7 +5,6 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 //import 'package:geocoder/geocoder.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:waterockbarmanagerapp/barspage2.dart';
 
 class BarMap extends StatefulWidget {

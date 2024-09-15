@@ -158,7 +158,7 @@ class _BarsPageWidgetState extends State<BarPageWidget2> {
             allBarsList.where((e) => e.barName == barProduct.barName);
 
         // Add bar addresses to bars
-        correspondingBars?.forEach((bar) async {
+        correspondingBars.forEach((bar) async {
           // listOFBarAddresses.add(bar.barAddress);
           print(bar.barAddress);
           /* String destinationWithoutSpace = bar.barAddress.replaceAll(' ', '');
