@@ -9,6 +9,7 @@ import 'package:waterockbarmanagerapp/models/allbarsmodel.dart';
 import 'package:waterockbarmanagerapp/models/barproductsmodel.dart';
 import 'package:waterockbarmanagerapp/models/locationdistancemodel.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Bar {
   final String name;
@@ -65,12 +66,37 @@ class BarTile extends StatelessWidget {
         barImage = bar.image;
         barPhone = bar.phone;
 
+        incrementBarViews(barName);
+
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => const BarDetailsPageWidget()));
       },
     );
+  }
+
+  Future<void> incrementBarViews(String barName) async {
+    final url = Uri.parse('https://waterockapi.wegotam.com/incrementViews');
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'barName': barName}),
+      );
+
+      if (response.statusCode == 200) {
+        print('View incremented successfully');
+      } else if (response.statusCode == 404) {
+        print('Bar not found');
+      } else {
+        print('Failed to increment views: ${response.body}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
   }
 }
 

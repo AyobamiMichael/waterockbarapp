@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,6 +22,7 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
   String distanceResult = '';
   late Position _currentPosition;
   String currentAddress = '';
+  final TextEditingController _reviewController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -28,6 +31,12 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
     print(BarTile.barImage);
     requestLocationPermission();
     getBarDistance(BarTile.barAddress);
+  }
+
+  @override
+  void dispose() {
+    _reviewController.dispose();
+    super.dispose();
   }
 
   void _launchDialer(String phoneNumber) async {
@@ -40,6 +49,16 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
     } else {
       throw 'Could not launch $phoneNumber';
     }
+  }
+
+  int _selectedRating = 0; // This will store the selected number of stars
+
+  void _setRating(int rating) {
+    setState(() {
+      _selectedRating = rating;
+    });
+    print(
+        'Rating selected: $rating'); // You can replace this with your saving logic
   }
 
   @override
@@ -165,6 +184,62 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
                             style:
                                 TextStyle(fontSize: 20, color: Colors.black)),
                       )),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _reviewController,
+                            decoration: InputDecoration(
+                              hintText: 'Write a review...',
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.send, color: Colors.blue),
+                          onPressed: () {
+                            // Logic for sending review
+                            print('Review sent');
+                            String customerReview = _reviewController.text;
+                            sendCustomerReview(BarTile.barName, customerReview,
+                                _selectedRating.toString());
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  // Rating stars
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Row(
+                      children: List.generate(5, (index) {
+                        return IconButton(
+                          icon: Icon(
+                            index < _selectedRating
+                                ? Icons.star
+                                : Icons
+                                    .star_border, // Filled star for selected, border for unselected
+                            color: Colors.amber,
+                            size: 30,
+                          ),
+                          onPressed: () {
+                            _setRating(index +
+                                1); // Set rating to the clicked star index
+                          },
+                        );
+                      }),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -172,6 +247,35 @@ class _BarDetailsPageWidgetState extends State<BarDetailsPageWidget> {
         ),
       ),
     );
+  }
+
+  Future<void> sendCustomerReview(
+      String barName, String customerReview, String rating) async {
+    final url = Uri.parse('https://waterockapi.wegotam.com/customerreview');
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'barName': barName,
+          'customerReview': customerReview,
+          'rating': rating
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Review added successfully');
+        _reviewController.clear();
+      } else if (response.statusCode == 404) {
+        print('Bar not found');
+      } else {
+        print('Failed to add review: ${response.body}');
+      }
+    } catch (error) {
+      print('Error: $error');
+    }
   }
 
   Future<void> requestLocationPermission() async {
