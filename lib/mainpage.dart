@@ -3,6 +3,7 @@ import 'package:waterockbarmanagerapp/allbarsfromapi.dart';
 import 'package:waterockbarmanagerapp/bardetailspage.dart';
 import 'package:waterockbarmanagerapp/barproductsfromapi.dart';
 import 'package:waterockbarmanagerapp/barspage2.dart';
+import 'package:waterockbarmanagerapp/homepage.dart';
 import 'package:waterockbarmanagerapp/models/allbarsmodel.dart';
 import 'package:waterockbarmanagerapp/models/barproductsmodel.dart';
 
@@ -20,7 +21,9 @@ class MainPageWidgetState extends State<MainPageWidget> {
   static String barAddress = '';
   static String barPhone = '';
   static String barImage = '';
-  final List<String> imageNames = [
+  final List<String> foodsImagesList = [];
+  final List<String> foodsDisplayNamesList = [];
+  /* final List<String> imageNames = [
     'abacha.jpeg',
     'asunmeat.jpeg',
     'beefshawarma.jpeg',
@@ -52,7 +55,7 @@ class MainPageWidgetState extends State<MainPageWidget> {
     'Peppered Snail',
     'Fresh fish',
     'Cowleg Pepper soup'
-  ];
+  ];*/
 
   late BarproductsFromApi barproductsFromApi;
   List<Barproducts>? barProductsList;
@@ -72,6 +75,7 @@ class MainPageWidgetState extends State<MainPageWidget> {
     barproductsFromApi.getBarproducts();
 
     fetchData();
+    populateFoodsImagesAndDisplayNamesList();
   }
 
   void fetchData() async {
@@ -102,6 +106,50 @@ class MainPageWidgetState extends State<MainPageWidget> {
     print(allbarsFiltered);
   }
 
+  void populateFoodsImagesAndDisplayNamesList() {
+    if (HomepageState.productNameSelected == 'African') {
+      foodsImagesList.add('abacha.jpeg');
+      foodsImagesList.add('swallow.jpeg');
+      foodsImagesList.add('nkwobi.jpeg');
+      foodsImagesList.add('okpa1.jpeg');
+      foodsImagesList.add('pepperedsnail.jpeg');
+      foodsImagesList.add('cowlegpeppersoup2.jpeg');
+      foodsImagesList.add('asunmeat.jpeg');
+      foodsImagesList.add('ukwa2.jpeg');
+      foodsImagesList.add('Zobodrink.jpeg');
+
+      foodsDisplayNamesList.add('Abacha');
+      foodsDisplayNamesList.add('Swallow');
+      foodsDisplayNamesList.add('Nkwobi');
+      foodsDisplayNamesList.add('Okpa');
+      foodsDisplayNamesList.add('Peppered Snail');
+      foodsDisplayNamesList.add('Cowleg Pepper soup');
+      foodsDisplayNamesList.add('Asuun(Peppered meat)');
+      foodsDisplayNamesList.add('Ukwa');
+      foodsDisplayNamesList.add('Zobo');
+    }
+    if (HomepageState.productNameSelected == 'Continental') {
+      foodsImagesList.add('beefshawarma.jpeg');
+      foodsImagesList.add('chickenshawarma.jpg');
+      foodsImagesList.add('grilledchickenparts.jpeg');
+      foodsImagesList.add('riceandstew.jpeg');
+      foodsImagesList.add('crookerfish2.jpeg');
+      foodsImagesList.add('freshfish2.jpeg');
+
+      foodsDisplayNamesList.add('Beef Sharwama');
+      foodsDisplayNamesList.add('Chicken Sharwama');
+      foodsDisplayNamesList.add('Grilled Chickenparts');
+      foodsDisplayNamesList.add('Rice and stew');
+      foodsDisplayNamesList.add('Crooker fish');
+      foodsDisplayNamesList.add('Fresh fish');
+    }
+    if (HomepageState.productNameSelected == 'Palm Wine') {
+      foodsImagesList.add('palmwine2.jpg');
+      // Not yet on the data base.
+      foodsDisplayNamesList.add('Palm Wine');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,14 +164,15 @@ class MainPageWidgetState extends State<MainPageWidget> {
             },
           )
         ]),
+        backgroundColor: Colors.black,
         body: ListView.builder(
-            itemCount: imageNames.length,
+            itemCount: foodsImagesList.length,
             itemBuilder: (context, index) {
               return GestureDetector(
                   onTap: () {
                     print('Image $index clicked');
                     setState(() {
-                      productNameSelected = productsDisplayNames[index];
+                      productNameSelected = foodsDisplayNamesList[index];
                     });
                     print(productNameSelected);
                     Navigator.push(
@@ -139,7 +188,7 @@ class MainPageWidgetState extends State<MainPageWidget> {
                           width: 300,
                           height: 200,
                           child: Image.asset(
-                            'assets/images/${imageNames[index]}',
+                            'assets/images/${foodsImagesList[index]}',
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -155,11 +204,11 @@ class MainPageWidgetState extends State<MainPageWidget> {
                           ),
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            productsDisplayNames[index],
+                            foodsDisplayNamesList[index],
                             style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
                         ),
                       ],
