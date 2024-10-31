@@ -6,6 +6,7 @@ import 'package:waterockbarmanagerapp/barspage2.dart';
 import 'package:waterockbarmanagerapp/mainpage.dart';
 import 'package:waterockbarmanagerapp/models/allbarsmodel.dart';
 import 'package:waterockbarmanagerapp/models/barproductsmodel.dart';
+import 'package:waterockbarmanagerapp/supportpage.dart';
 
 List<String> suggestionList = [];
 
@@ -86,6 +87,18 @@ class HomepageState extends State<Homepage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('WaterockBars'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.contact_support),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SupportPage()));
+                print('Support');
+              },
+            )
+          ],
         ),
         backgroundColor: Colors.black,
         body: ListView.builder(
